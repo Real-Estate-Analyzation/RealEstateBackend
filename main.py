@@ -33,6 +33,9 @@ app.register_blueprint(player_api)
 app.register_blueprint(app_projects)  # register app pages
 app.register_blueprint(realestate_api)
 
+with app.app_context():
+    initHouses()
+    initUsers()
 
 @app.errorhandler(404)  # catch for URL not found
 def page_not_found(e):
@@ -48,11 +51,6 @@ def index():
 @app.route('/table/')  # connects /stub/ URL to stub() function
 def table():
     return render_template("table.html")
-
-@app.before_first_request
-def activate_job():  # activate these items 
-    initHouses()
-    initUsers()
 
 '''
 @app.before_request
