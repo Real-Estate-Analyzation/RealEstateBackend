@@ -16,6 +16,7 @@ from model.realEstateModels import initHouses
 from api.realestaste import realestate_api
 from api.user import user_api  # Blueprint import api definition
 from api.player import player_api
+from api.titanic import titanic_api
 # database migrations
 from model.users import initUsers
 from model.players import initPlayers
@@ -32,6 +33,8 @@ app.register_blueprint(user_api)  # register api routes
 app.register_blueprint(player_api)
 app.register_blueprint(app_projects)  # register app pages
 app.register_blueprint(realestate_api)
+app.register_blueprint(titanic_api)
+
 
 with app.app_context():
     initHouses()
@@ -62,12 +65,12 @@ def before_request():
 
 @app.after_request
 def after_request(response):
-    #response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
-    #allowed_origins = ['http://localhost:8080', 'http://localhost:4200', 'http://127.0.0.1:4200', 'https://nighthawkcoders.github.io', 'https://real-estate-analyzation.github.io']
+    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8080')
+    allowed_origins = ['http://localhost:4100', 'http://localhost:4200', 'http://127.0.0.1:4200', 'https://nighthawkcoders.github.io', 'https://real-estate-analyzation.github.io']
 
-    #origin = request.headers.get('Origin')
-    #if origin and origin in allowed_origins:
-    #    response.headers.add('Access-Control-Allow-Origin', origin)
+    origin = request.headers.get('Origin')
+    if origin and origin in allowed_origins:
+        response.headers.add('Access-Control-Allow-Origin', origin)
 
     response.headers.add('Access-Control-Allow-Origin', request.headers.get('Origin'))
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
