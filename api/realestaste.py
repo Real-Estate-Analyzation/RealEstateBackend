@@ -8,6 +8,7 @@ from model.realEstateModels import House, Favorite
 from ai.OpenAIEngine import HouseAIEngine
 import os
 from cryptography.fernet import Fernet
+from ml.realestatemlmodel import RecEngine
 
 realestate_api = Blueprint('house', __name__, url_prefix='/api/house')
 
@@ -59,8 +60,19 @@ class houses:
             houses = [db.session.query(House).filter(House.id == house).first() for house in houses_id]
             return jsonify([house.few_details() for house in houses])
         
+    class _MLPriceModel(Resource):
+        model = RecEngine()
+
+        def get(self):
+            bed = int(request.args.get("bed"))
+            bath = int(request.args.get("bath"))
+            area = int(request.args.get("area"))
+            rentestimate = int(request.args.get("rent"))
+            return int(self.model.predictPrice(bath, bed, area, rentestimate))
+                
     api.add_resource(_getHouses, "/houses")
     api.add_resource(_gethousedetails, "/housedetails")
     api.add_resource(_getOpenAIResponse, "/openai")
     api.add_resource(_addToFavorites, "/addtofavorites")
     api.add_resource(_getFavorites, "/getfavorites")
+    api.add_resource(_MLPriceModel, "/mlpricemodel")
