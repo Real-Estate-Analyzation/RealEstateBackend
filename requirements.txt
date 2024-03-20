@@ -14,3 +14,4 @@ openai==0.28.1
 langchain==0.0.294
 cryptography==41.0.5
 Flask_Cors==3.0.10
+seaborn
